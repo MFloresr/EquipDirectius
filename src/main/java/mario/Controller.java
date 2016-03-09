@@ -37,8 +37,8 @@ public class Controller {
     private TextField textCoordinacio;
     @FXML
     private ListView listaCapEstudi;
-    ObservableList<String> items = FXCollections.observableArrayList ();
-
+    private ObservableList<String> items = FXCollections.observableArrayList ();
+    private File fichero = new File (".","fichero.txt");
     ArrayList<Professor> profesores = new ArrayList<Professor>();
     Alert alert = new Alert(Alert.AlertType.WARNING);
     private int mujeres = 0;
@@ -184,8 +184,34 @@ public class Controller {
         ponerEnPantalla();
     }
 
+    public void crearFichero(){
+        if(!fichero.exists())
+            try {
+                // A partir del objeto File creamos el fichero físicamente
+                if (fichero.createNewFile())
+                    System.out.println("El fichero se ha creado correctamente");
+                else
+                    System.out.println("No ha podido ser creado el fichero");
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+        }else{
+            System.out.println("El fichero ya existe");
+        }
+    }
+    public void escribirFichero(){
+        if (fichero.exists()){
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(fichero));
+                bw.write("Mario Flores");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @FXML
     public void guardar(Event event) {
-
+        crearFichero();
+        escribirFichero();
     }
 }

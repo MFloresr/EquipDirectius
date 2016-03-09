@@ -43,6 +43,8 @@ public class Controller {
     Alert alert = new Alert(Alert.AlertType.WARNING);
     private int mujeres = 0;
     private int hombres = 0;
+    private int homes = 0;
+    private int dones = 0;
     private Random rand;
     private ArrayList<Professor> profesoresElegidos= new ArrayList<Professor>();
 
@@ -101,7 +103,12 @@ public class Controller {
                 }else{
                     mujeres = mujeres+1;
                 }
+            }if(generosmenores()== true){
+                anadirlista();
+            }else{
+                alertaMensaje();
             }
+
         }if(profesores.size()== 5) {
             for (int i = 0; i < profesores.size(); i++) {
                 if (profesores.get(i).getSexo().equals("Home")) {
@@ -109,6 +116,10 @@ public class Controller {
                 } else {
                     mujeres = mujeres + 1;
                 }
+            }if(generosmenores()== true){
+                anadirlista();
+            }else{
+                alertaMensaje();
             }
         }if(profesores.size()== 6) {
             for (int i = 0; i < profesores.size(); i++) {
@@ -117,24 +128,57 @@ public class Controller {
                 } else {
                     mujeres = mujeres + 1;
                 }
+            }if(generosmenores()== true){
+                anadirlista();
+            }else{
+                alertaMensaje();
             }
         }else {
-            while (profesoresElegidos.size()<6){
-                Random r = new Random();
-                int numero = r.nextInt(profesores.size());
-                String persona =profesores.get(numero).getSexo();
-                if(persona.equals("Home") && hombres<3){
-                    hombres=hombres+1;
-                    profesoresElegidos.add(profesores.get(numero));
-                }if(persona.equals("Dona") && mujeres<3){
-                    mujeres=mujeres+1;
-                    profesoresElegidos.add(profesores.get(numero));
+            if(igualdadGenero()){
+                while (profesoresElegidos.size()<6){
+                    Random r = new Random();
+                    int numero = r.nextInt(profesores.size());
+                    String persona =profesores.get(numero).getSexo();
+                    if(persona.equals("Home") && hombres<3){
+                        hombres=hombres+1;
+                        profesoresElegidos.add(profesores.get(numero));
+                    }if(persona.equals("Dona") && mujeres<3){
+                        mujeres=mujeres+1;
+                        profesoresElegidos.add(profesores.get(numero));
+                    }
                 }
+            }else{
+                alertaMensaje();
             }
         }
 
     }
+    public void anadirlista(){
+        for(int i=0;i<profesores.size();i++){
+            profesoresElegidos.add(profesores.get(i));
+        }
+    }
 
+    public boolean generosmenores(){
+        if(mujeres==2 && hombres==2){
+            return true;
+        }if(mujeres==2 && hombres==3 || mujeres==3 && hombres==2){
+            return true;
+        }if(mujeres==3 && hombres==3){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    public void alertaMensaje(){
+        alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error ");
+        alert.setHeaderText("Error de personal");
+        alert.setContentText("Esta plantilla no cumple la igualdad de genero");
+
+        alert.showAndWait();
+    }
     public void ponerEnPantalla(){
         rand = new Random();
         int numerodirec= rand.nextInt(profesoresElegidos.size());
@@ -164,6 +208,8 @@ public class Controller {
         profesoresElegidos.clear();
         hombres=0;
         mujeres=0;
+        homes=0;
+        dones=0;
         items.clear();
     }
 
@@ -171,6 +217,8 @@ public class Controller {
         profesoresElegidos.clear();
         hombres=0;
         mujeres=0;
+        homes=0;
+        dones=0;
         items.clear();
     }
 
@@ -202,10 +250,39 @@ public class Controller {
         if (fichero.exists()){
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(fichero));
-                bw.write("Mario Flores");
+
+                bw.write(" Director: " + textDireccion.getText());
+                bw.newLine();
+                bw.write(" Secretari: " + textSecretari.getText());
+                bw.newLine();
+                for(int i = 0; i<items.size(); i++){
+                    bw.write(" Cap de estudi" +(i+1)+ ": " + items.get(i));
+                    bw.newLine();
+                }
+                bw.write(" Coordinador: " + textCoordinacio.getText());
+                System.out.println("se escribio");
+                bw.newLine();
+                bw.write("____________________________________________________");
+                bw.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("imposible escribir en el fichero");
             }
+        }
+    }
+
+    private boolean igualdadGenero(){
+        for (int i = 0; i<profesores.size();i++){
+            if(profesores.get(i).getSexo().equals("Home")){
+                homes=homes+1;
+            }else{
+                dones=dones+1;
+            }
+        }
+        if(homes>3 && dones>3 ){
+            return true;
+        }else{
+            return false;
         }
     }
 

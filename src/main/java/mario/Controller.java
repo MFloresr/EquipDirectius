@@ -133,7 +133,7 @@ public class Controller {
             }else{
                 alertaMensaje();
             }
-        }else {
+        }if(profesores.size()>6){
             if(igualdadGenero()){
                 while (profesoresElegidos.size()<6){
                     Random r = new Random();
@@ -161,6 +161,8 @@ public class Controller {
 
     public boolean generosmenores(){
         if(mujeres==2 && hombres==2){
+            return true;
+        }if(mujeres==1 && hombres==3 || mujeres==3 && hombres==1) {
             return true;
         }if(mujeres==2 && hombres==3 || mujeres==3 && hombres==2){
             return true;
